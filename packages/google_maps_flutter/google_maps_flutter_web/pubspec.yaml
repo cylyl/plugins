@@ -1,0 +1,28 @@
+name: google_maps_flutter_web
+description: Web platform implementation of Google Maps
+version: 0.0.1
+author: cylyl
+homepage:
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  google_maps_flutter_platform_interface:
+    path: ../google_maps_flutter_platform_interface
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  google_maps_flutter: ^0.5.24+1
+
+
+flutter:
+  plugin:
+    web:
+      pluginClass: GoogleMapsFlutterWebPlugin
+      fileName: google_maps_flutter_web.dart
