@@ -9,10 +9,10 @@ same interface.
 # Usage
 
 To implement a new platform-specific implementation of `google_maps_flutter`, extend
-[`UrlLauncherPlatform`][2] with an implementation that performs the
+[`GoogleMapsFlutterPlatform`][2] with an implementation that performs the
 platform-specific behavior, and when you register your plugin, set the default
-`UrlLauncherPlatform` by calling
-`UrlLauncherPlatform.instance = MyPlatformUrlLauncher()`.
+`GoogleMapsFlutterPlatform` by calling
+`GoogleMapsFlutterPlatform.instance = MyPlatformGoogleMapsFlutter()`.
 
 # Note on breaking changes
 
