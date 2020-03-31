@@ -5,7 +5,6 @@
 library google_maps_flutter;
 
 import 'dart:async';
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -14,23 +13,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
+import 'package:google_maps_flutter_platform_interface/src/method_channel/method_channel_google_maps_flutter.dart';
 
-part 'src/bitmap.dart';
-part 'src/callbacks.dart';
-part 'src/camera.dart';
-part 'src/cap.dart';
-part 'src/circle.dart';
-part 'src/circle_updates.dart';
+export 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart'
+    show
+        ArgumentCallbacks,
+        ArgumentCallback,
+        BitmapDescriptor,
+        CameraPosition,
+        CameraTargetBounds,
+        CameraUpdate,
+        Cap,
+        Circle,
+        CircleId,
+        InfoWindow,
+        JointType,
+        LatLng,
+        LatLngBounds,
+        MapStyleException,
+        MapType,
+        Marker,
+        MarkerId,
+        MinMaxZoomPreference,
+        PatternItem,
+        Polygon,
+        PolygonId,
+        Polyline,
+        PolylineId,
+        ScreenCoordinate;
+
 part 'src/controller.dart';
 part 'src/google_map.dart';
-part 'src/joint_type.dart';
-part 'src/location.dart';
-part 'src/marker.dart';
-part 'src/marker_updates.dart';
-part 'src/pattern_item.dart';
-part 'src/polygon.dart';
-part 'src/polygon_updates.dart';
-part 'src/polyline.dart';
-part 'src/polyline_updates.dart';
-part 'src/screen_coordinate.dart';
-part 'src/ui.dart';
