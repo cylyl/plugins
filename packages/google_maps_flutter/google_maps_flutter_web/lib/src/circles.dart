@@ -37,7 +37,7 @@ class CirclesController{
     CircleController controller = CircleController(
         circle: gmCircle,
         consumeTapEvents:circle.consumeTapEvents,
-        ontab:(){ googleMapController.onCircleTap(circle.circleId);});
+        ontab:(){ onCircleTap(circle.circleId);});
     _circleIdToController[circle.circleId.value] = controller;
   }
 
@@ -73,18 +73,15 @@ class CirclesController{
     });
   }
 
-  ///String circleId = googleMapsCircleIdToDartCircleId.get(googleCircleId);
-  //    if (circleId == null) {
-  //      return false;
-  //    }
-  //    methodChannel.invokeMethod("circle#onTap", Convert.circleIdToJson(circleId));
-  //    CircleController circleController = circleIdToController.get(circleId);
-  //    if (circleController != null) {
-  //      return circleController.consumeTapEvents();
-  //    }
-  //    return false;
-  bool onCircleTap(String googleCircleId) {
 
+  bool onCircleTap(CircleId circleId) {
+    googleMapController.onCircleTap(circleId);
+    final CircleController circleController = _circleIdToController[circleId
+        .value];
+    if(circleController != null) {
+      return circleController.consumeTapEvents;
+    }
+    return false;
   }
 
 }
