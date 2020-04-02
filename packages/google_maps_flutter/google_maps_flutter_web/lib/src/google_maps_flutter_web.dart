@@ -15,7 +15,12 @@ class GoogleMapsPlugin extends GoogleMapsFlutterPlatform {
   }
 
   int _id = 0 ;
-  HashMap _mapList = HashMap<int, GoogleMapController>();
+  HashMap _mapById = HashMap<int, GoogleMapController>();
+  final StreamController<MapEvent> _controller =
+  StreamController<MapEvent>.broadcast();
+
+  Stream<MapEvent> _events(int mapId) =>
+      _controller.stream.where((event) => event.mapId == mapId);
 
   @override
   Future<void> init(int mapId) {
@@ -26,7 +31,7 @@ class GoogleMapsPlugin extends GoogleMapsFlutterPlatform {
       Map<String, dynamic> optionsUpdate, {
         @required int mapId,
       }) {
-//    throw UnimplementedError('updateMapOptions() has not been implemented.');
+//    //throw UnimplementedError('updateMapOptions() has not been implemented.');
   }
 
   @override
@@ -34,7 +39,7 @@ class GoogleMapsPlugin extends GoogleMapsFlutterPlatform {
       MarkerUpdates markerUpdates, {
         @required int mapId,
       }) {
-    throw UnimplementedError('updateMarkers() has not been implemented.');
+//    //throw UnimplementedError('updateMarkers() has not been implemented.');
   }
 
   @override
@@ -42,7 +47,7 @@ class GoogleMapsPlugin extends GoogleMapsFlutterPlatform {
       PolygonUpdates polygonUpdates, {
         @required int mapId,
       }) {
-    throw UnimplementedError('updatePolygons() has not been implemented.');
+//    //throw UnimplementedError('updatePolygons() has not been implemented.');
   }
 
   @override
@@ -50,7 +55,7 @@ class GoogleMapsPlugin extends GoogleMapsFlutterPlatform {
       PolylineUpdates polylineUpdates, {
         @required int mapId,
       }) {
-    throw UnimplementedError('updatePolylines() has not been implemented.');
+//    //throw UnimplementedError('updatePolylines() has not been implemented.');
   }
 
   @override
@@ -58,7 +63,9 @@ class GoogleMapsPlugin extends GoogleMapsFlutterPlatform {
       CircleUpdates circleUpdates, {
         @required int mapId,
       }) {
-
+      _mapById[mapId].circlesController.addCircles(circleUpdates.circlesToAdd);
+      _mapById[mapId].circlesController.changeCircles(circleUpdates.circlesToChange);
+    _mapById[mapId].circlesController.removeCircles(circleUpdates.circleIdsToRemove);
   }
 
   @override
@@ -66,7 +73,7 @@ class GoogleMapsPlugin extends GoogleMapsFlutterPlatform {
       CameraUpdate cameraUpdate, {
         @required int mapId,
       }) {
-    throw UnimplementedError('animateCamera() has not been implemented.');
+    //throw UnimplementedError('animateCamera() has not been implemented.');
   }
 
   @override
@@ -74,7 +81,7 @@ class GoogleMapsPlugin extends GoogleMapsFlutterPlatform {
       CameraUpdate cameraUpdate, {
         @required int mapId,
       }) {
-    throw UnimplementedError('moveCamera() has not been implemented.');
+    //throw UnimplementedError('moveCamera() has not been implemented.');
   }
 
   @override
@@ -82,14 +89,14 @@ class GoogleMapsPlugin extends GoogleMapsFlutterPlatform {
       String mapStyle, {
         @required int mapId,
       }) {
-    throw UnimplementedError('setMapStyle() has not been implemented.');
+    //throw UnimplementedError('setMapStyle() has not been implemented.');
   }
 
   @override
   Future<LatLngBounds> getVisibleRegion({
     @required int mapId,
   }) {
-    throw UnimplementedError('getVisibleRegion() has not been implemented.');
+    //throw UnimplementedError('getVisibleRegion() has not been implemented.');
   }
 
   @override
@@ -97,7 +104,7 @@ class GoogleMapsPlugin extends GoogleMapsFlutterPlatform {
       LatLng latLng, {
         @required int mapId,
       }) {
-    throw UnimplementedError('getScreenCoordinate() has not been implemented.');
+    //throw UnimplementedError('getScreenCoordinate() has not been implemented.');
   }
 
   @override
@@ -105,7 +112,7 @@ class GoogleMapsPlugin extends GoogleMapsFlutterPlatform {
       ScreenCoordinate screenCoordinate, {
         @required int mapId,
       }) {
-    throw UnimplementedError('getLatLng() has not been implemented.');
+    //throw UnimplementedError('getLatLng() has not been implemented.');
   }
 
   @override
@@ -113,8 +120,7 @@ class GoogleMapsPlugin extends GoogleMapsFlutterPlatform {
       MarkerId markerId, {
         @required int mapId,
       }) {
-    throw UnimplementedError(
-        'showMarkerInfoWindow() has not been implemented.');
+    //throw UnimplementedError(   'showMarkerInfoWindow() has not been implemented.');
   }
 
   @override
@@ -122,8 +128,7 @@ class GoogleMapsPlugin extends GoogleMapsFlutterPlatform {
       MarkerId markerId, {
         @required int mapId,
       }) {
-    throw UnimplementedError(
-        'hideMarkerInfoWindow() has not been implemented.');
+    //throw UnimplementedError(    'hideMarkerInfoWindow() has not been implemented.');
   }
 
   @override
@@ -131,14 +136,14 @@ class GoogleMapsPlugin extends GoogleMapsFlutterPlatform {
       MarkerId markerId, {
         @required int mapId,
       }) {
-    throw UnimplementedError('updateMapOptions() has not been implemented.');
+    //throw UnimplementedError('updateMapOptions() has not been implemented.');
   }
 
   @override
   Future<double> getZoomLevel({
     @required int mapId,
   }) {
-    throw UnimplementedError('getZoomLevel() has not been implemented.');
+    //throw UnimplementedError('getZoomLevel() has not been implemented.');
   }
 
   // The following are the 11 possible streams of data from the native side
@@ -146,57 +151,57 @@ class GoogleMapsPlugin extends GoogleMapsFlutterPlatform {
 
   @override
   Stream<CameraMoveStartedEvent> onCameraMoveStarted({@required int mapId}) {
-    throw UnimplementedError('onCameraMoveStarted() has not been implemented.');
+    return _events(mapId);
   }
 
   @override
   Stream<CameraMoveEvent> onCameraMove({@required int mapId}) {
-    throw UnimplementedError('onCameraMove() has not been implemented.');
+    return _events(mapId);
   }
 
   @override
   Stream<CameraIdleEvent> onCameraIdle({@required int mapId}) {
-    throw UnimplementedError('onCameraMove() has not been implemented.');
+    return _events(mapId);
   }
 
   @override
   Stream<MarkerTapEvent> onMarkerTap({@required int mapId}) {
-    throw UnimplementedError('onMarkerTap() has not been implemented.');
+    return _events(mapId).whereType<MarkerTapEvent>();
   }
 
   @override
   Stream<InfoWindowTapEvent> onInfoWindowTap({@required int mapId}) {
-    throw UnimplementedError('onInfoWindowTap() has not been implemented.');
+    return _events(mapId).whereType<InfoWindowTapEvent>();
   }
 
   @override
   Stream<MarkerDragEndEvent> onMarkerDragEnd({@required int mapId}) {
-    throw UnimplementedError('onMarkerDragEnd() has not been implemented.');
+    return _events(mapId).whereType<MarkerDragEndEvent>();
   }
 
   @override
   Stream<PolylineTapEvent> onPolylineTap({@required int mapId}) {
-    throw UnimplementedError('onPolylineTap() has not been implemented.');
+    return _events(mapId).whereType<PolylineTapEvent>();
   }
 
   @override
   Stream<PolygonTapEvent> onPolygonTap({@required int mapId}) {
-    throw UnimplementedError('onPolygonTap() has not been implemented.');
+    return _events(mapId).whereType<PolygonTapEvent>();
   }
 
   @override
   Stream<CircleTapEvent> onCircleTap({@required int mapId}) {
-    throw UnimplementedError('onCircleTap() has not been implemented.');
+    return _events(mapId).whereType<CircleTapEvent>();
   }
 
   @override
   Stream<MapTapEvent> onTap({@required int mapId}) {
-    throw UnimplementedError('onTap() has not been implemented.');
+    return _events(mapId).whereType<MapTapEvent>();
   }
 
   @override
   Stream<MapLongPressEvent> onLongPress({@required int mapId}) {
-    throw UnimplementedError('onLongPress() has not been implemented.');
+    return _events(mapId).whereType<MapLongPressEvent>();
   }
 
   @override
@@ -204,7 +209,6 @@ class GoogleMapsPlugin extends GoogleMapsFlutterPlatform {
       Map<String, dynamic> creationParams,
       Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers,
       PlatformViewCreatedCallback onPlatformViewCreated) {
-
     GoogleMap.MapOptions options;
     CameraPosition position;
 
@@ -233,17 +237,21 @@ class GoogleMapsPlugin extends GoogleMapsFlutterPlatform {
       )
     ;
 
-    int mapId=_id++;
-    _mapList[mapId] =
+    _mapById[_id] =
         GoogleMapController.build(
-            mapId: mapId,
+            mapId: _id,
+            streamController: _controller,
+            onPlatformViewCreated: onPlatformViewCreated,
             options: options,
             position: position,
-            initialCircles: initialCircles.circlesToAdd,
+            initialCircles: initialCircles != null ? initialCircles.circlesToAdd : null,
         )
     ;
-
-    return _mapList[mapId].html;
+    ///TODO not create redundent view.
+    return _mapById[_id++].html;
   }
+
+
+
 }
 

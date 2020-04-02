@@ -22,15 +22,21 @@ class GoogleMapController {
 
   Set<Circle> initialCircles;
 
+  final StreamController<MapEvent> streamController;
 
   ///TODO
   GoogleMapController.build({
     @required this.mapId,
+    @required this.streamController,
     @required this.options,
     @required this.position,
-    @required this.initialCircles,
+    @required this.initialCircles, onPlatformViewCreated,
   }) {
-    circlesController = CirclesController();
+    circlesController = CirclesController(googleMapController: this);
+    html = HtmlElementView(
+        viewType: 'plugins.flutter.io/google_maps_$mapId'
+    );
+    onPlatformViewCreated.call(mapId);
     div = DivElement()
       ..id = 'plugins.flutter.io/google_maps_$mapId'
     ;
@@ -38,7 +44,7 @@ class GoogleMapController {
       'plugins.flutter.io/google_maps_$mapId',
           (int viewId) => div,
     );
-    html = HtmlElementView(viewType: 'plugins.flutter.io/google_maps_$mapId');
+
     googleMap = GoogleMap.GMap(div, options);
 
     onMapReady(googleMap);
@@ -47,6 +53,7 @@ class GoogleMapController {
   }
 
   void updateInitialCircles() {
+    if(initialCircles == null) return;
     circlesController.addCircles(initialCircles);
   }
 
@@ -62,6 +69,10 @@ class GoogleMapController {
     if (googleMap != null) {
       updateInitialCircles();
     }
+  }
+
+  void onCircleTap(CircleId circleId) {
+    streamController.add(CircleTapEvent(mapId, circleId));
   }
 }
 
