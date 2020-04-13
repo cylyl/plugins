@@ -173,6 +173,7 @@ class Polyline {
     );
   }
 
+  /// Converts this object to something serializable in JSON.
   dynamic toJson() {
     final Map<String, dynamic> json = <String, dynamic>{};
 
@@ -220,8 +221,7 @@ class Polyline {
         endCap == typedOther.endCap &&
         visible == typedOther.visible &&
         width == typedOther.width &&
-        zIndex == typedOther.zIndex &&
-        onTap == typedOther.onTap;
+        zIndex == typedOther.zIndex;
   }
 
   @override

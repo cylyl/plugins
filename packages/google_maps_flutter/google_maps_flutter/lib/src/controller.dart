@@ -252,13 +252,10 @@ class GoogleMapController {
   /// Returns the current zoom level of the map
   Future<double> getZoomLevel() {
     return _googleMapsFlutterPlatform.getZoomLevel(mapId: mapId);
-<<<<<<< HEAD
-=======
   }
 
   /// Returns the image bytes of the map
   Future<Uint8List> takeSnapshot() {
     return _googleMapsFlutterPlatform.takeSnapshot(mapId: mapId);
->>>>>>> 5057b0abca700f046b7550fc18624d689d45f382
   }
 }
