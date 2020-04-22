@@ -92,7 +92,6 @@ with the key `io.flutter.embedded_views_preview` and the value `YES`.
 
 ### Both
 
-
 You can now add a `GoogleMap` widget to your widget tree.
 
 The map view can be controlled with the `GoogleMapController` that is passed to
