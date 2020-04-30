@@ -5,6 +5,7 @@
 library google_maps_flutter;
 
 import 'dart:async';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -21,10 +22,7 @@ export 'package:google_maps_flutter_platform_interface/google_maps_flutter_platf
         ArgumentCallback,
         BitmapDescriptor,
         CameraPosition,
-<<<<<<< HEAD
-=======
         CameraPositionCallback,
->>>>>>> d84758910d74060aa8b4d10f21c4953752cfcd3b
         CameraTargetBounds,
         CameraUpdate,
         Cap,
