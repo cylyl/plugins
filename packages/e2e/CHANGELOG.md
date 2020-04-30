@@ -1,3 +1,11 @@
+## 0.2.4+4
+
+* Fixed a hang that occurred on platforms that don't have a `MethodChannel` listener registered..
+
+## 0.2.4+3
+
+* Fixed code snippet in the readme under the "Using Flutter driver to run tests" section.
+
 ## 0.2.4+2
 
 * Make the pedantic dev_dependency explicit.

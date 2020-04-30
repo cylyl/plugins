@@ -226,3 +226,6 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
     throw UnimplementedError('getZoomLevel() has not been implemented.');
   }
 }
+export 'src/platform_interface/google_maps_flutter_platform.dart';
+export 'src/types/types.dart';
+export 'src/events/map_event.dart';
