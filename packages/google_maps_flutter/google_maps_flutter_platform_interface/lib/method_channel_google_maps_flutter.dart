@@ -3,90 +3,19 @@
 // found in the LICENSE file.
 
 import 'dart:async';
-import 'dart:ui';
 
-import 'package:meta/meta.dart';
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:flutter/services.dart';
 
-import 'method_channel_google_maps_flutter.dart';
+import 'google_maps_flutter_platform_interface.dart';
 
-/// Exception when a map style is invalid or was unable to be set.
-///
-/// See also: `setStyle` on [GoogleMapController] for why this exception
-/// might be thrown.
-class MapStyleException implements Exception {
-  /// Default constructor for [MapStyleException].
-  const MapStyleException(this.cause);
+MethodChannel _channel;
 
-  /// The reason `GoogleMapController.setStyle` would throw this exception.
-  final String cause;
-}
+/// An implementation of [GoogleMapsFlutterPlatform] that uses method channels.
+class MethodChannelGoogleMapsFlutter extends GoogleMapsFlutterPlatform {
 
-
-/// Represents a point coordinate in the [GoogleMap]'s view.
-///
-/// The screen location is specified in screen pixels (not display pixels) relative
-/// to the top left of the map, not top left of the whole screen. (x, y) = (0, 0)
-/// corresponds to top-left of the [GoogleMap] not the whole screen.
-@immutable
-class ScreenCoordinate {
-  /// Creates an immutable representation of a point coordinate in the [GoogleMap]'s view.
-  const ScreenCoordinate({
-    @required this.x,
-    @required this.y,
-  });
-
-  /// Represents the number of pixels from the left of the [GoogleMap].
-  final int x;
-
-  /// Represents the number of pixels from the top of the [GoogleMap].
-  final int y;
-
-  /// [x] [y] coordinate in Json format
-  dynamic toJson() {
-    return <String, int>{
-      "x": x,
-      "y": y,
-    };
-  }
-
-  @override
-  String toString() => '$runtimeType($x, $y)';
-
-  @override
-  bool operator ==(Object o) {
-    return o is ScreenCoordinate && o.x == x && o.y == y;
-  }
-
-  @override
-  int get hashCode => hashValues(x, y);
-}
-
-/// The interface that implementations of google_maps_flutter must implement.
-///
-/// Platform implementations should extend this class rather than implement it as `google_maps_flutter`
-/// does not consider newly added methods to be breaking changes. Extending this class
-/// (using `extends`) ensures that the subclass will get the default implementation, while
-/// platform implementations that `implements` this interface will be broken by newly added
-/// [GoogleMapsFlutterPlatform] methods.
-abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
-  /// Constructs a GoogleMapsFlutterPlatform.
-  GoogleMapsFlutterPlatform() : super(token: _token);
-
-  static final Object _token = Object();
-
-  static GoogleMapsFlutterPlatform _instance = MethodChannelGoogleMapsFlutter(0);
-
-  /// The default instance of [GoogleMapsFlutterPlatform] to use.
-  ///
-  /// Defaults to [MethodChannelUrlLauncher].
-  static GoogleMapsFlutterPlatform get instance => _instance;
-
-  /// Platform-specific plugins should set this with their own platform-specific
-  /// class that extends [GoogleMapsFlutterPlatform] when they register themselves.
-  static set instance(GoogleMapsFlutterPlatform instance) {
-    PlatformInterface.verifyToken(instance, _token);
-    _instance = instance;
+///Initialize control of a [MethodChannelGoogleMapsFlutter] with [id].
+  MethodChannelGoogleMapsFlutter(int id){
+    _channel = MethodChannel('plugins.flutter.io/google_maps_$id');
   }
 
   /// Updates configuration options of the map user interface.
@@ -96,7 +25,13 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
   ///
   /// The returned [Future] completes after listeners have been notified.
   Future<void> updateMapOptions(Map<String, dynamic> optionsUpdate) async {
-    throw UnimplementedError('updateMapOptions() has not been implemented.');
+    assert(optionsUpdate != null);
+    await _channel.invokeMethod<void>(
+      'map#update',
+      <String, dynamic>{
+        'options': optionsUpdate,
+      },
+    );
   }
 
   /// Updates marker configuration.
@@ -106,7 +41,11 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
   ///
   /// The returned [Future] completes after listeners have been notified.
   Future<void> updateMarkers(Map<String, dynamic> markerUpdates) async {
-    throw UnimplementedError('updateMarkers() has not been implemented.');
+    assert(markerUpdates != null);
+    await _channel.invokeMethod<void>(
+      'markers#update',
+      markerUpdates,
+    );
   }
 
   /// Updates polygon configuration.
@@ -116,7 +55,11 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
   ///
   /// The returned [Future] completes after listeners have been notified.
   Future<void> updatePolygons(Map<String, dynamic> polygonUpdates) async {
-    throw UnimplementedError('updatePolygons() has not been implemented.');
+    assert(polygonUpdates != null);
+    await _channel.invokeMethod<void>(
+      'polygons#update',
+      polygonUpdates,
+    );
   }
 
   /// Updates polyline configuration.
@@ -126,7 +69,11 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
   ///
   /// The returned [Future] completes after listeners have been notified.
   Future<void> updatePolylines(Map<String, dynamic> polylineUpdates) async {
-    throw UnimplementedError('updatePolylines() has not been implemented.');
+    assert(polylineUpdates != null);
+    await _channel.invokeMethod<void>(
+      'polylines#update',
+      polylineUpdates,
+    );
   }
 
   /// Updates circle configuration.
@@ -136,23 +83,31 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
   ///
   /// The returned [Future] completes after listeners have been notified.
   Future<void> updateCircles(Map<String, dynamic> circleUpdates) async {
-    throw UnimplementedError('updateCircles() has not been implemented.');
+    assert(circleUpdates != null);
+    await _channel.invokeMethod<void>(
+      'circles#update',
+      circleUpdates,
+    );
   }
 
   /// Starts an animated change of the map camera position.
   ///
   /// The returned [Future] completes after the change has been started on the
   /// platform side.
-  Future<void> animateCamera(Map<String, dynamic> cameraUpdate) async {
-    throw UnimplementedError('animateCamera() has not been implemented.');
+  Future<void> animateCamera(dynamic cameraUpdate) async {
+    await _channel.invokeMethod<void>('camera#animate', <String, dynamic>{
+      'cameraUpdate': cameraUpdate,
+    });
   }
 
   /// Changes the map camera position.
   ///
   /// The returned [Future] completes after the change has been made on the
   /// platform side.
-  Future<void> moveCamera(Map<String, dynamic> cameraUpdate) async {
-    throw UnimplementedError('moveCamera() has not been implemented.');
+  Future<void> moveCamera(dynamic cameraUpdate) async {
+    await _channel.invokeMethod<void>('camera#move', <String, dynamic>{
+      'cameraUpdate': cameraUpdate,
+    });
   }
 
   /// Sets the styling of the base map.
@@ -169,12 +124,17 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
   /// and [Android](https://developers.google.com/maps/documentation/android-sdk/style-reference)
   /// style reference for more information regarding the supported styles.
   Future<void> setMapStyle(String mapStyle) async {
-    throw UnimplementedError('setMapStyle() has not been implemented.');
+    final List<dynamic> successAndError =
+    await _channel.invokeMethod<List<dynamic>>('map#setStyle', mapStyle);
+    final bool success = successAndError[0];
+    if (!success) {
+      throw MapStyleException(successAndError[1]);
+    }
   }
 
   /// Return [Map<String, dynamic>] defining the region that is visible in a map.
   Future<Map<String, dynamic>> getVisibleRegion() async {
-    throw UnimplementedError('getVisibleRegion() has not been implemented.');
+    return await _channel.invokeMapMethod<String, dynamic>('map#getVisibleRegion');
   }
 
   /// Returns [List] corresponding to the [ScreenCoordinate] in the current map view.
@@ -182,7 +142,8 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
   /// Returned [List] corresponds to a screen location. The screen location is specified in screen
   /// pixels (not display pixels) relative to the top left of the map, not top left of the whole screen.
   Future<List<dynamic>> getLatLng(ScreenCoordinate screenCoordinate) async {
-    throw UnimplementedError('getLatLng() has not been implemented.');
+    return await _channel.invokeMethod<List<dynamic>>(
+        'map#getLatLng', screenCoordinate.toJson());
   }
 
   /// Programmatically show the Info Window for a [Marker].
@@ -194,7 +155,9 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
   ///   * [hideMarkerInfoWindow] to hide the Info Window.
   ///   * [isMarkerInfoWindowShown] to check if the Info Window is showing.
   Future<void> showMarkerInfoWindow( String markerId ) async {
-    throw UnimplementedError('showMarkerInfoWindow() has not been implemented.');
+    assert(markerId != null);
+    await _channel.invokeMethod<void>(
+        'markers#showInfoWindow', <String, String>{'markerId': markerId});
   }
 
   /// Programmatically hide the Info Window for a [Marker].
@@ -206,7 +169,9 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
   ///   * [showMarkerInfoWindow] to show the Info Window.
   ///   * [isMarkerInfoWindowShown] to check if the Info Window is showing.
   Future<void> hideMarkerInfoWindow(String markerId ) async {
-    throw UnimplementedError('hideMarkerInfoWindow() has not been implemented.');
+    assert(markerId != null);
+    await _channel.invokeMethod<void>(
+        'markers#hideInfoWindow', <String, String>{'markerId': markerId});
   }
 
   /// Returns `true` when the [InfoWindow] is showing, `false` otherwise.
@@ -218,14 +183,15 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
   ///   * [showMarkerInfoWindow] to show the Info Window.
   ///   * [hideMarkerInfoWindow] to hide the Info Window.
   Future<bool> isMarkerInfoWindowShown(String markerId ) async {
-    throw UnimplementedError('updateMapOptions() has not been implemented.');
+    assert(markerId != null);
+    return await _channel.invokeMethod<bool>('markers#isInfoWindowShown',
+        <String, String>{'markerId': markerId});
   }
 
   /// Returns the current zoom level of the map
   Future<double> getZoomLevel() async {
-    throw UnimplementedError('getZoomLevel() has not been implemented.');
+    final double zoomLevel =
+    await _channel.invokeMethod<double>('map#getZoomLevel');
+    return zoomLevel;
   }
 }
-export 'src/platform_interface/google_maps_flutter_platform.dart';
-export 'src/types/types.dart';
-export 'src/events/map_event.dart';

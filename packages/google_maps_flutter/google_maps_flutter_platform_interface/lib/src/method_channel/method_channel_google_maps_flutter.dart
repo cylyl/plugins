@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -13,16 +12,7 @@ import 'package:flutter/gestures.dart';
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-/// An implementation of [GoogleMapsFlutterPlatform] that uses [MethodChannel] to communicate with the native code.
-///
-/// The `google_maps_flutter` plugin code itself never talks to the native code directly. It delegates
-/// all those calls to an instance of a class that extends the GoogleMapsFlutterPlatform.
-///
-/// The architecture above allows for platforms that communicate differently with the native side
-/// (like web) to have a common interface to extend.
-///
-/// This is the instance that runs when the native side talks to your Flutter app through MethodChannels,
-/// like the Android and iOS platforms.
+/// An implementation of [GoogleMapsFlutterPlatform] that uses method channels.
 class MethodChannelGoogleMapsFlutter extends GoogleMapsFlutterPlatform {
   // Keep a collection of id -> channel
   // Every method call passes the int mapId
@@ -53,12 +43,12 @@ class MethodChannelGoogleMapsFlutter extends GoogleMapsFlutterPlatform {
   //
   // It is a `broadcast` because multiple controllers will connect to
   // different stream views of this Controller.
-  final StreamController<MapEvent> _mapEventStreamController =
+  final StreamController<MapEvent> _controller =
       StreamController<MapEvent>.broadcast();
 
   // Returns a filtered view of the events in the _controller, by mapId.
   Stream<MapEvent> _events(int mapId) =>
-      _mapEventStreamController.stream.where((event) => event.mapId == mapId);
+      _controller.stream.where((event) => event.mapId == mapId);
 
   @override
   Stream<CameraMoveStartedEvent> onCameraMoveStarted({@required int mapId}) {
@@ -118,62 +108,62 @@ class MethodChannelGoogleMapsFlutter extends GoogleMapsFlutterPlatform {
   Future<dynamic> _handleMethodCall(MethodCall call, int mapId) async {
     switch (call.method) {
       case 'camera#onMoveStarted':
-        _mapEventStreamController.add(CameraMoveStartedEvent(mapId));
+        _controller.add(CameraMoveStartedEvent(mapId));
         break;
       case 'camera#onMove':
-        _mapEventStreamController.add(CameraMoveEvent(
+        _controller.add(CameraMoveEvent(
           mapId,
           CameraPosition.fromMap(call.arguments['position']),
         ));
         break;
       case 'camera#onIdle':
-        _mapEventStreamController.add(CameraIdleEvent(mapId));
+        _controller.add(CameraIdleEvent(mapId));
         break;
       case 'marker#onTap':
-        _mapEventStreamController.add(MarkerTapEvent(
+        _controller.add(MarkerTapEvent(
           mapId,
           MarkerId(call.arguments['markerId']),
         ));
         break;
       case 'marker#onDragEnd':
-        _mapEventStreamController.add(MarkerDragEndEvent(
+        _controller.add(MarkerDragEndEvent(
           mapId,
           LatLng.fromJson(call.arguments['position']),
           MarkerId(call.arguments['markerId']),
         ));
         break;
       case 'infoWindow#onTap':
-        _mapEventStreamController.add(InfoWindowTapEvent(
+        _controller.add(InfoWindowTapEvent(
           mapId,
           MarkerId(call.arguments['markerId']),
         ));
         break;
       case 'polyline#onTap':
-        _mapEventStreamController.add(PolylineTapEvent(
+        _controller.add(PolylineTapEvent(
           mapId,
           PolylineId(call.arguments['polylineId']),
         ));
         break;
       case 'polygon#onTap':
-        _mapEventStreamController.add(PolygonTapEvent(
+        _controller.add(PolygonTapEvent(
           mapId,
           PolygonId(call.arguments['polygonId']),
         ));
         break;
       case 'circle#onTap':
-        _mapEventStreamController.add(CircleTapEvent(
+        _controller.add(CircleTapEvent(
           mapId,
           CircleId(call.arguments['circleId']),
         ));
         break;
       case 'map#onTap':
-        _mapEventStreamController.add(MapTapEvent(
+        _controller.add(MapTapEvent(
           mapId,
           LatLng.fromJson(call.arguments['position']),
         ));
         break;
       case 'map#onLongPress':
-        _mapEventStreamController.add(MapLongPressEvent(
+        _controller.add(MapLongPressEvent(
           mapId,
           LatLng.fromJson(call.arguments['position']),
         ));
@@ -435,14 +425,6 @@ class MethodChannelGoogleMapsFlutter extends GoogleMapsFlutterPlatform {
     @required int mapId,
   }) {
     return channel(mapId).invokeMethod<double>('map#getZoomLevel');
-  }
-
-  /// Returns the image bytes of the map
-  @override
-  Future<Uint8List> takeSnapshot({
-    @required int mapId,
-  }) {
-    return channel(mapId).invokeMethod<Uint8List>('map#takeSnapshot');
   }
 
   /// This method builds the appropriate platform view where the map

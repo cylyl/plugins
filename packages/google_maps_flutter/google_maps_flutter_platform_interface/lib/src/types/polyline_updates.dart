@@ -61,16 +61,10 @@ class PolylineUpdates {
     polylinesToChange = _polylinesToChange;
   }
 
-  /// Set of Polylines to be added in this update.
   Set<Polyline> polylinesToAdd;
-
-  /// Set of PolylineIds to be removed in this update.
   Set<PolylineId> polylineIdsToRemove;
-
-  /// Set of Polylines to be changed in this update.
   Set<Polyline> polylinesToChange;
 
-  /// Converts this object to something serializable in JSON.
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> updateMap = <String, dynamic>{};
 

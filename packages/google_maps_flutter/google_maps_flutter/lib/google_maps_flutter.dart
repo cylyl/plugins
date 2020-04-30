@@ -5,7 +5,6 @@
 library google_maps_flutter;
 
 import 'dart:async';
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
@@ -18,6 +17,7 @@ import 'package:google_maps_flutter_platform_interface/src/method_channel/method
 
 export 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart'
     show
+<<<<<<< HEAD
     ArgumentCallbacks,
     ArgumentCallback,
     BitmapDescriptor,
@@ -46,3 +46,32 @@ export 'package:google_maps_flutter_platform_interface/google_maps_flutter_platf
 
 part 'src/controller.dart';
 part 'src/google_map.dart';
+=======
+        ArgumentCallbacks,
+        ArgumentCallback,
+        BitmapDescriptor,
+        CameraPosition,
+        CameraTargetBounds,
+        CameraUpdate,
+        Cap,
+        Circle,
+        CircleId,
+        InfoWindow,
+        JointType,
+        LatLng,
+        LatLngBounds,
+        MapStyleException,
+        MapType,
+        Marker,
+        MarkerId,
+        MinMaxZoomPreference,
+        PatternItem,
+        Polygon,
+        PolygonId,
+        Polyline,
+        PolylineId,
+        ScreenCoordinate;
+
+part 'src/controller.dart';
+part 'src/google_map.dart';
+>>>>>>> google_maps_flutter_platform_interface

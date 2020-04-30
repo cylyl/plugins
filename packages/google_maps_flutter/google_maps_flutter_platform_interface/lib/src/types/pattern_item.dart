@@ -30,6 +30,5 @@ class PatternItem {
 
   final dynamic _json;
 
-  /// Converts this object to something serializable in JSON.
   dynamic toJson() => _json;
 }

@@ -77,15 +77,13 @@ class BitmapDescriptor {
   /// https://flutter.dev/docs/development/ui/assets-and-images#declaring-resolution-aware-image-assets
   /// This method takes into consideration various asset resolutions
   /// and scales the images to the right resolution depending on the dpi.
-  /// Set `mipmaps` to false to load the exact dpi version of the image, `mipmap` is true by default.
   static Future<BitmapDescriptor> fromAssetImage(
     ImageConfiguration configuration,
     String assetName, {
     AssetBundle bundle,
     String package,
-    bool mipmaps = true,
   }) async {
-    if (!mipmaps && configuration.devicePixelRatio != null) {
+    if (configuration.devicePixelRatio != null) {
       return BitmapDescriptor._(<dynamic>[
         'fromAssetImage',
         assetName,
@@ -111,6 +109,5 @@ class BitmapDescriptor {
 
   final dynamic _json;
 
-  /// Convert the object to a Json format.
   dynamic toJson() => _json;
 }
