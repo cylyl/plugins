@@ -1,6 +1,7 @@
 // Copyright 2018 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
+
 import 'dart:ui' show hashValues;
 
 import 'package:meta/meta.dart';
@@ -27,6 +28,7 @@ class LatLng {
   /// The longitude in degrees between -180.0 (inclusive) and 180.0 (exclusive).
   final double longitude;
 
+  /// Converts this object to something serializable in JSON.
   dynamic toJson() {
     return <double>[latitude, longitude];
   }
@@ -75,6 +77,7 @@ class LatLngBounds {
   /// The northeast corner of the rectangle.
   final LatLng northeast;
 
+  /// Converts this object to something serializable in JSON.
   dynamic toJson() {
     return <dynamic>[southwest.toJson(), northeast.toJson()];
   }

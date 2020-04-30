@@ -202,7 +202,7 @@ class PlacePolylineBodyState extends State<PlacePolylineBody> {
 
   @override
   Widget build(BuildContext context) {
-    final bool iOSorNotSelected = /* TODO Platform.isIOS||*/ (selectedPolyline == null);
+    final bool iOSorNotSelected = Platform.isIOS || (selectedPolyline == null);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

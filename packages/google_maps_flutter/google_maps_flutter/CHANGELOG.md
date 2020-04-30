@@ -1,10 +1,28 @@
-<<<<<<< HEAD
-## 0.5.25
-* Move MethodChannel code to MethodChannelGoogleMapsFlutter(Flutter Platform Interface)
-=======
-## 0.6.0
+## 0.5.27
 
-* Move MethodChannel code to MethodChannelGoogleMapsFlutter (Flutter Platform Interface)
+* Migrate the core plugin to use `google_maps_flutter_platform_interface` APIs.
+
+## 0.5.26+4
+
+* Android: Fix map view crash when "exit app" while using `FragmentActivity`.
+* Android: Remove listeners from `GoogleMap` when disposing.
+
+## 0.5.26+3
+
+* iOS: observe the bounds update for the `GMSMapView` to reset the camera setting.
+* Update UI related e2e tests to wait for camera update on the platform thread.
+
+## 0.5.26+2
+
+* Fix UIKit availability warnings and CocoaPods podspec lint warnings.
+
+## 0.5.26+1
+
+* Removes a errorneously added method from the GoogleMapController.h header file.
+
+## 0.5.26
+
+* Adds support for toggling zoom controls (Android only)
 
 ## 0.5.25+3
 
@@ -21,7 +39,6 @@
 ## 0.5.25
 
 * Add an optional param `mipmaps` for `BitmapDescriptor.fromAssetImage`.
->>>>>>> 5057b0abca700f046b7550fc18624d689d45f382
 
 ## 0.5.24+1
 

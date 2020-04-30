@@ -1,17 +1,7 @@
-## 1.0.0+4
-* Add init method and Move MethodChannel code to MethodChannelGoogleMapsFlutter 
+## 1.0.1
 
-## 1.0.0+3
-* Clean up format
+* Initial open source release.
 
-## 1.0.0+2
+## 1.0.0 ... 1.0.0+5
 
-* Add PlatformInterface methods according to GoogleMapsFlutter
-
-## 1.0.0+1
-
-* Update README
-
-## 1.0.0
-
-* Initial release.
+* Development.
