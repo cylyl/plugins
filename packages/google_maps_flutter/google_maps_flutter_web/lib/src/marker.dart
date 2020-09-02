@@ -1,66 +1,82 @@
+// Copyright 2017 The Chromium Authors. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
 part of google_maps_flutter_web;
 
+/// The `MarkerController` class wraps a [gmaps.Marker], how it handles events, and its associated (optional) [gmaps.InfoWindow] widget.
 class MarkerController {
+  gmaps.Marker _marker;
 
-  GoogleMap.Marker _marker;
-  GoogleMap.InfoWindow infoWindow;
-  bool consumeTapEvents = false;
-  ui.VoidCallback ontab;
-  ui.VoidCallback onInfoWindowTap;
-  LatLngCallback onDragEnd;
-  bool infoWindowShown = false;
-  ///
+  final bool _consumeTapEvents;
+
+  final gmaps.InfoWindow _infoWindow;
+
+  bool _infoWindowShown = false;
+
+  /// Creates a `MarkerController`, which wraps a [gmaps.Marker] object, its `onTap`/`onDrag` behavior, and its associated [gmaps.InfoWindow].
   MarkerController({
-    @required GoogleMap.Marker marker,
-    this.infoWindow,
-    this.consumeTapEvents,
-    this.ontab,
-    this.onDragEnd,
-    this.onInfoWindowTap,
-  }){
-    _marker = marker;
-    if(consumeTapEvents) {
-    }
-    if(ontab !=null){
-      marker.onClick.listen((event) {ontab.call(); });
-    }
-    if(_marker.draggable) {
-      marker.onDragend.listen((event) {
-        if(onDragEnd !=null) onDragEnd.call(event.latLng);
+    @required gmaps.Marker marker,
+    gmaps.InfoWindow infoWindow,
+    bool consumeTapEvents = false,
+    LatLngCallback onDragEnd,
+    ui.VoidCallback onTap,
+  })  : _marker = marker,
+        _infoWindow = infoWindow,
+        _consumeTapEvents = consumeTapEvents {
+    if (onTap != null) {
+      _marker.onClick.listen((event) {
+        onTap.call();
       });
     }
-    if(onInfoWindowTap !=null) {
-      infoWindow.addListener('click', onInfoWindowTap);
+    if (onDragEnd != null) {
+      _marker.onDragend.listen((event) {
+        _marker.position = event.latLng;
+        onDragEnd.call(event.latLng);
+      });
     }
   }
 
+  /// Returns `true` if this Controller will use its own `onTap` handler to consume events.
+  bool get consumeTapEvents => _consumeTapEvents;
 
-  set marker (GoogleMap.Marker marker) => {_marker = marker};
+  /// Returns `true` if the [gmaps.InfoWindow] associated to this marker is being shown.
+  bool get infoWindowShown => _infoWindowShown;
 
-  void update(GoogleMap.MarkerOptions options) {
+  /// Returns the [gmaps.Marker] associated to this controller.
+  gmaps.Marker get marker => _marker;
+
+  /// Updates the options of the wrapped [gmaps.Marker] object.
+  void update(
+    gmaps.MarkerOptions options, {
+    String newInfoWindowContent,
+  }) {
     _marker.options = options;
+    if (_infoWindow != null && newInfoWindowContent != null) {
+      _infoWindow.content = newInfoWindowContent;
+    }
   }
 
+  /// Disposes of the currently wrapped [gmaps.Marker].
   void remove() {
     _marker.visible = false;
     _marker.map = null;
     _marker = null;
-    //_marker.remove();
   }
 
+  /// Hide the associated [gmaps.InfoWindow].
   void hideInfoWindow() {
-    if(infoWindow != null) {
-      infoWindow.close();
-      infoWindowShown = false;
+    if (_infoWindow != null) {
+      _infoWindow.close();
+      _infoWindowShown = false;
     }
   }
 
-  void showMarkerInfoWindow() {
-    infoWindow.open(_marker.map);
-    infoWindowShown = true;
-  }
-
-  bool isInfoWindowShown() {
-    return infoWindowShown;
+  /// Show the associated [gmaps.InfoWindow].
+  void showInfoWindow() {
+    if (_infoWindow != null) {
+      _infoWindow.open(_marker.map, _marker);
+      _infoWindowShown = true;
+    }
   }
 }
