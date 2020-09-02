@@ -1,17 +1,19 @@
-## 1.0.0+4
-* Add init method and Move MethodChannel code to MethodChannelGoogleMapsFlutter 
+## 1.0.4
 
-## 1.0.0+3
-* Clean up format
+* Add a `dispose` method to the interface, so implementations may cleanup resources acquired on `init`.
 
-## 1.0.0+2
+## 1.0.3
 
-* Add PlatformInterface methods according to GoogleMapsFlutter
+* Pass icon width/height if present on `fromAssetImage` BitmapDescriptors (web only)
 
-## 1.0.0+1
+## 1.0.2
 
-* Update README
+* Update lower bound of dart dependency to 2.1.0.
 
-## 1.0.0
+## 1.0.1
 
-* Initial release.
+* Initial open source release.
+
+## 1.0.0 ... 1.0.0+5
+
+* Development.

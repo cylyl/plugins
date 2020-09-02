@@ -4,14 +4,14 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'google_maps_flutter_web'
-  s.version          = '0.0.1'
-  s.summary          = 'A new flutter plugin project.'
+  s.version          = '0.1.0'
+  s.summary          = 'No-op implementation of google maps flutter web plugin to avoid build issues on iOS'
   s.description      = <<-DESC
-A new flutter plugin project.
+temp fake google_maps_flutter_web plugin
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'https://github.com/flutter/plugins/tree/master/packages/google_maps_flutter/google_maps_flutter_web'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { 'Flutter Team' => 'flutter-dev@googlegroups.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'

@@ -41,7 +41,7 @@ class GoogleMapController {
   /// Used to communicate with the native platform.
   ///
   /// Accessible only for testing.
-  // TODO: Remove this once tests are migrated to not need this.
+  // TODO(dit) https://github.com/flutter/flutter/issues/55504 Remove this getter.
   @visibleForTesting
   MethodChannel get channel {
     if (_googleMapsFlutterPlatform is MethodChannelGoogleMapsFlutter) {
@@ -252,5 +252,15 @@ class GoogleMapController {
   /// Returns the current zoom level of the map
   Future<double> getZoomLevel() {
     return _googleMapsFlutterPlatform.getZoomLevel(mapId: mapId);
+  }
+
+  /// Returns the image bytes of the map
+  Future<Uint8List> takeSnapshot() {
+    return _googleMapsFlutterPlatform.takeSnapshot(mapId: mapId);
+  }
+
+  /// Disposes of the platform resources
+  void dispose() {
+    _googleMapsFlutterPlatform.dispose(mapId: mapId);
   }
 }

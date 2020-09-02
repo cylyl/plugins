@@ -3,6 +3,8 @@
 // found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:typed_data';
+
 import 'package:flutter/widgets.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
@@ -13,13 +15,14 @@ import 'package:google_maps_flutter_platform_interface/src/method_channel/method
 import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-/// The interface that implementations of google_maps_flutter must implement.
+/// The interface that platform-specific implementations of `google_maps_flutter` must extend.
 ///
-/// Platform implementations should extend this class rather than implement it as `google_maps_flutter`
-/// does not consider newly added methods to be breaking changes. Extending this class
-/// (using `extends`) ensures that the subclass will get the default implementation, while
-/// platform implementations that `implements` this interface will be broken by newly added
-/// [GoogleMapsFlutterPlatform] methods.
+/// Avoid `implements` of this interface. Using `implements` makes adding any new
+/// methods here a breaking change for end users of your platform!
+///
+/// Do `extends GoogleMapsFlutterPlatform` instead, so new methods added here are
+/// inherited in your code with the default implementation (that throws at runtime),
+/// rather than breaking your users at compile time.
 abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
   /// Constructs a GoogleMapsFlutterPlatform.
   GoogleMapsFlutterPlatform() : super(token: _token);
@@ -144,9 +147,6 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
   /// style is left unchanged.
   ///
   /// The style string can be generated using [map style tool](https://mapstyle.withgoogle.com/).
-  /// Also, refer [iOS](https://developers.google.com/maps/documentation/ios-sdk/style-reference)
-  /// and [Android](https://developers.google.com/maps/documentation/android-sdk/style-reference)
-  /// style reference for more information regarding the supported styles.
   Future<void> setMapStyle(
     String mapStyle, {
     @required int mapId,
@@ -239,6 +239,13 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
     throw UnimplementedError('getZoomLevel() has not been implemented.');
   }
 
+  /// Returns the image bytes of the map
+  Future<Uint8List> takeSnapshot({
+    @required int mapId,
+  }) {
+    throw UnimplementedError('takeSnapshot() has not been implemented.');
+  }
+
   // The following are the 11 possible streams of data from the native side
   // into the plugin
 
@@ -295,6 +302,11 @@ abstract class GoogleMapsFlutterPlatform extends PlatformInterface {
   /// A Map has been long-pressed at a certain [LatLng].
   Stream<MapLongPressEvent> onLongPress({@required int mapId}) {
     throw UnimplementedError('onLongPress() has not been implemented.');
+  }
+
+  /// Dispose of whatever resources the `mapId` is holding on to.
+  void dispose({@required int mapId}) {
+    throw UnimplementedError('dispose() has not been implemented.');
   }
 
   /// Returns a widget displaying the map view
